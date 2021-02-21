@@ -9,7 +9,7 @@ class FoodController extends Controller
 {
     public function index()
     {
-        $foods = auth()->user()->foods;
+        $foods = Food::all();
 
         return response()->json([
             'success' => true,
@@ -19,7 +19,7 @@ class FoodController extends Controller
 
     public function show($id)
     {
-        $food = auth()->user()->foods()->find($id);
+        $food = food::find($id);
 
         if(!$food) {
             return response()->json([
@@ -38,13 +38,15 @@ class FoodController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required'
+            'name' => 'required',
+            'restaurant_id' => 'required'
         ]);
 
         $food = new Food();
         $food->name = $request->name;
+        $food->restaurant_id = $request->restaurant_id;
 
-        if (auth()->user()->restaurants()->foods()->save($food))
+        if (Food::create($food->toArray()))
             return response()->json([
                 'success' => true,
                 'data' => $food->toArray()
@@ -58,7 +60,7 @@ class FoodController extends Controller
 
     public function update(Request $request, $id)
     {
-        $food = auth()->user()->foods()->find($id);
+        $food = Food::find($id);
 
         if (!$food) {
             return response()->json([
@@ -82,7 +84,7 @@ class FoodController extends Controller
 
     public function destroy($id)
     {
-        $food = auth()->user()->restaurants()->foods()->find($id);
+        $food = Food::find($id);
 
         if (!$food) {
             return response()->json([
