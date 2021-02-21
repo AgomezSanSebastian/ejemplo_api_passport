@@ -19,7 +19,7 @@ class RestaurantController extends Controller
 
     public function show($id)
     {
-        $restaurant = auth()->user()->restaurants()->find($id);
+        $restaurant = Restaurant::find($id);
 
         if(!$restaurant) {
             return response()->json([
@@ -46,7 +46,7 @@ class RestaurantController extends Controller
         $restaurant->name = $request->name;
         $restaurant->street = $request->street;
 
-        if (auth()->user()->restaurants()->save($restaurant))
+        if (Restaurant::create($restaurant->toArray()))
             return response()->json([
                 'success' => true,
                 'data' => $restaurant->toArray()
@@ -60,7 +60,7 @@ class RestaurantController extends Controller
 
     public function update(Request $request, $id)
     {
-        $restaurant = auth()->user()->restaurants()->find($id);
+        $restaurant = Restaurant::find($id);
 
         if (!$restaurant) {
             return response()->json([
@@ -69,7 +69,7 @@ class RestaurantController extends Controller
             ], 400);
         }
 
-        $updated = $post->fill($request->all())->save();
+        $updated = $restaurant->fill($request->all())->save();
 
         if ($updated)
             return response()->json([
@@ -84,7 +84,7 @@ class RestaurantController extends Controller
 
     public function destroy($id)
     {
-        $restaurant = auth()->user()->restaurants()->find($id);
+        $restaurant = Restaurant::find($id);
 
         if (!$restaurant) {
             return response()->json([

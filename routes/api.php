@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PassportAuthController;
 use App\Http\Controllers\FoodController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\RestaurantController;
 
 /*
@@ -23,5 +22,7 @@ Route::post('register', [PassportAuthController::class,'register'] );
 Route::post('login', [PassportAuthController::class,'login'] );
 
 Route::middleware('auth:api')->group(function() {
-    Route::resource('users', PostController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('restaurants', RestaurantController::class);
+    Route::resource('foods', FoodController::class);
 });
